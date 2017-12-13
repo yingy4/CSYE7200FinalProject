@@ -1,0 +1,33 @@
+@(message: String, style: String = "scala")
+
+@defining(play.core.PlayVersion.current) { version =>
+
+<section id="top">
+  <div class="wrapper">
+    <h1><a href="https://playframework.com/documentation/@version/Home">@message</a></h1>
+  </div>
+</section>
+
+<div id="content" class="wrapper doc">
+<article>
+
+  <h1>Welcome to Searchest</h1>
+
+  <p>
+    What Do You Want To Know?.
+  </p>
+
+  <blockquote>
+    <p>
+
+      <form action="@routes.ScalaPoster.save()" method="POST">
+           <input name="scala_name"> <br />
+          <input type="submit" value="Searchest">
+      </form>
+
+    </p>
+  </blockquote>
+    <p>
+        By Team1: Zixuan Xu, Jianan Wen, Wenbo Sun
+    </p>
+}
