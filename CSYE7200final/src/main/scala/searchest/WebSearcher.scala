@@ -26,6 +26,7 @@ case class ContentMessage(title: String, meta: String, urls: List[URL])
 case class ScrapFinishedMessage(url: URL)
 case class WriterFinishedMessage(url: URL, urls: List[URL])
 case class ScrapFailureMessage(url: URL, reason: Throwable)
+case class GoodJobMessage(msg: String)
 
 package object searchest {
   implicit def stringtourl(s: String): URL = new URL(s)
@@ -47,6 +48,7 @@ class Master(system: ActorSystem) extends Actor {
     case StartMessage(url) =>
       scrap(url)
     case ScrapFinishedMessage(url) =>
+      sender() ! GoodJobMessage("well done")
     case WriterFinishedMessage(url, urls) =>
       if (numVisited < maxPages)
         urls.toSet.filter(l => !scrapCounts.contains(l)).foreach(scrap)
@@ -92,7 +94,7 @@ class URLCrawler(master: ActorRef, htmlwriter: ActorRef) extends Actor {
 
   val process = "Process next url"
 
-  val urlscraper = context actorOf Props(new URLScraper(htmlwriter))
+  val urlscraper = context actorOf Props(new URLScraper(htmlwriter,1))
   implicit val timeout = Timeout(3 seconds)
   val tick =
     context.system.scheduler.schedule(0 millis, 1000 millis, self, process)
@@ -114,14 +116,17 @@ class URLCrawler(master: ActorRef, htmlwriter: ActorRef) extends Actor {
   }
 }
 
-class URLScraper(htmlwriter: ActorRef) extends Actor {
+class URLScraper(htmlwriter: ActorRef, count: Int) extends Actor {
   val urlValidator = new UrlValidator()
 
   def receive: Receive = {
     case ScrapMessage(url) =>
-      val content = parse(url)
+
       sender() ! ScrapFinishedMessage(url)
-      htmlwriter ! IndexMessage(url, content)
+      if(count ==1) {
+        val content = parse(url)
+        htmlwriter ! IndexMessage(url, content)
+      }
   }
 
   def parse(url: URL): ContentMessage = {
