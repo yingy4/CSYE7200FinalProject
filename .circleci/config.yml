@@ -1,0 +1,8 @@
+version: 1
+jobs:
+   build:
+     docker:
+       - image: circleci/<scala>:<2.11.7>
+     steps:
+       - checkout
+       - run: echo "CSYE7200final"
