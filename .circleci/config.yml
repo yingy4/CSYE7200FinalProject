@@ -20,7 +20,7 @@ jobs:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
-      CODACY_PROJECT_TOKEN: d37e04f7997e439089f94d294d1de067
+      CODACY_PROJECT_TOKEN: bb50aecb812147729e184bd30bb87159
     
     steps:
       - checkout
