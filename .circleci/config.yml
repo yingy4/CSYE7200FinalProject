@@ -20,7 +20,7 @@ jobs:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
-      CODACY_PROJECT_TOKEN: x
+      CODACY_PROJECT_TOKEN: d37e04f7997e439089f94d294d1de067
     
     steps:
       - checkout
@@ -40,4 +40,9 @@ jobs:
           key: v1-dependencies--{{ checksum "CSYE7200final/build.sbt" }}
         
       # run tests!
-      - run: cat /dev/null | sbt "project CSYE7200final" test
+      - run: cat /dev/null | sbt "project CSYE7200final" clean coverage test
+      # generate test coverage report
+      - run: cat /dev/null | sbt "project CSYE7200final" coverageReport
+      - run: cat /dev/null | sbt "project CSYE7200final" coverageAggregate
+      # upload report to codacy
+      - run: cat /dev/null | sbt "project CSYE7200final" codacyCoverage
