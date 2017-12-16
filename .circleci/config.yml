@@ -32,7 +32,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: cat /dev/null | sbt CSYE7200final/test:compile
+      - run: cat /dev/null | sbt "project CSYE7200final" compile
 
       - save_cache:
           paths:
@@ -40,4 +40,4 @@ jobs:
           key: v1-dependencies--{{ checksum "CSYE7200final/build.sbt" }}
         
       # run tests!
-      - run: cat /dev/null | sbt CSYE7200final/test
+      - run: cat /dev/null | sbt "project CSYE7200final" test
